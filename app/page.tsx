@@ -3,8 +3,8 @@ export default function Home() {
     <main>
       {/* Hero Section */}
       <section id="hero">
-        <h1>Your Name</h1>
-        <p>Your role / tagline (e.g. Frontend Developer)</p>
+        <h1>Christian Avenir</h1>
+        <p>Full-Stack Developer</p>
       </section>
 
       {/* About Section */}
