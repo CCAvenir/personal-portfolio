@@ -42,7 +42,7 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact">
         <h2>Contact</h2>
-        <p>Email: youremail@example.com</p>
+        <p>Email: avenirchristian22@gmail.com</p>
         <p>GitHub: your-github-link</p>
         <p>LinkedIn: your-linkedin-link</p>
       </section>
