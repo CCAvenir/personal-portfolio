@@ -11,8 +11,7 @@ export default function Home() {
       <section id="about">
         <h2>About Me</h2>
         <p>
-          A short paragraph about who you are, your background,
-          and what youre passionate about.
+          I am a passionate full-stack developer with experience in building web applications using modern technologies. I enjoy solving complex problems and continuously learning new skills to improve my craft.
         </p>
       </section>
 
