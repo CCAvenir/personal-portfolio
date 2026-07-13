@@ -22,6 +22,10 @@ export default function Home() {
           <li>HTML / CSS</li>
           <li>JavaScript / TypeScript</li>
           <li>React / Next.js</li>
+          <li>React / Next.js</li>
+          <li>React / Next.js</li>
+          <li>React / Next.js</li>
+          <li>React / Next.js</li>
         </ul>
       </section>
 
