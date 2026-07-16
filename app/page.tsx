@@ -56,7 +56,7 @@ export default function Home() {
         <p>Email: avenirchristian22@gmail.com</p>
         <p>GitHub: your-github-link</p>
         <p>LinkedIn: your-linkedin-link</p>
-        <p>Contact Number: your-contact-number</p>
+        <p>Contact Number: 09669523502</p>
       </section>
     </main>
   );
