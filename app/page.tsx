@@ -54,7 +54,7 @@ export default function Home() {
       <section id="contact">
         <h2>Contact</h2>
         <p>Email: avenirchristian22@gmail.com</p>
-        <p>GitHub: your-github-link</p>
+        <p>GitHub: CCAvenir</p>
         <p>LinkedIn: your-linkedin-link</p>
         <p>Contact Number: 09669523502</p>
       </section>
