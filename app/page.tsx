@@ -54,7 +54,7 @@ export default function Home() {
       <section id="contact">
         <h2>Contact</h2>
         <p>Email: avenirchristian22@gmail.com</p>
-        <p>GitHub: CCAvenir</p>
+        <p>GitHub: github.com/CCAvenir</p>
         <p>LinkedIn: https://www.linkedin.com/in/christian-avenir-043257299/</p>
         <p>Contact Number: 09669523502</p>
       </section>
