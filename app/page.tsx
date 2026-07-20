@@ -48,6 +48,10 @@ export default function Home() {
           <h3>Project Name</h3>
           <p>Short description of the project.</p>
         </div>
+                <div>
+          <h3>Project Name</h3>
+          <p>Short description of the project.</p>
+        </div>
       </section>
 
       {/* Contact Section */}
