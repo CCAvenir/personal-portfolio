@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Container from "./Container";
 import { navigationData } from "@/data/navigation";
-import { resumeData } from "@/data/resume";
+// import { resumeData } from "@/data/resume";
 
 export default function Navbar() {
   return (
@@ -37,7 +37,7 @@ export default function Navbar() {
               );
             })}
 
-            {/* Resume Button Link */}
+         {/* Resume Button Link
             <a
               href={resumeData.downloadUrl || navigationData.resumeHref}
               target="_blank"
@@ -46,7 +46,7 @@ export default function Navbar() {
               aria-label="Download Resume"
             >
               Resume
-            </a>
+            </a> */}
           </div>
 
           {/* Mobile Navigation Toggle Placeholder */}
