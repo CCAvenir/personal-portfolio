@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Home, User, FolderKanban, Mail, Sun, Moon } from "lucide-react";
 import { navigationData } from "@/data/navigation";
 
@@ -14,39 +14,9 @@ const ICONS: Record<string, React.ElementType> = {
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
-  const pillRef = useRef<HTMLDivElement>(null);
-  const btnRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const iconRefs = useRef<Record<string, HTMLSpanElement | null>>({});
 
-  const [activeItem, setActiveItem] = useState(navigationData.items[0].name);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  function updatePill(name: string, smooth = true) {
-    const btn = btnRefs.current[name];
-    const pill = pillRef.current;
-    if (!btn || !pill) return;
-
-    pill.style.transition = smooth
-      ? "transform .5s cubic-bezier(.34,1.2,.64,1), width .5s cubic-bezier(.34,1.2,.64,1)"
-      : "none";
-    pill.style.width = `${btn.offsetWidth}px`;
-    pill.style.transform = `translateX(${btn.offsetLeft}px)`;
-  }
-
-  useEffect(() => {
-    const t = setTimeout(() => updatePill(activeItem, false), 50);
-    const onResize = () => updatePill(activeItem, false);
-    window.addEventListener("resize", onResize);
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("resize", onResize);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function handleSelect(name: string) {
-    setActiveItem(name);
-    updatePill(name, true);
-  }
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const nav = navRef.current;
@@ -61,7 +31,35 @@ export default function Navbar() {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    setTimeout(() => updatePill(activeItem, true), 100);
+  }
+
+  // ---- Dock magnification effect ----
+  function resetIcons() {
+    navigationData.items.forEach((item) => {
+      const el = iconRefs.current[item.name];
+      if (el) el.style.transform = "scale(1) translateY(0px)";
+    });
+  }
+
+  function focusIcon(hoverIndex: number) {
+    resetIcons();
+    const names = navigationData.items.map((i) => i.name);
+
+    const transformations = [
+      { idx: hoverIndex - 2, scale: 1.1, translateY: 0 },
+      { idx: hoverIndex - 1, scale: 1.25, translateY: -4 },
+      { idx: hoverIndex, scale: 1.5, translateY: -8 },
+      { idx: hoverIndex + 1, scale: 1.25, translateY: -4 },
+      { idx: hoverIndex + 2, scale: 1.1, translateY: 0 },
+    ];
+
+    transformations.forEach(({ idx, scale, translateY }) => {
+      const name = names[idx];
+      const el = name ? iconRefs.current[name] : null;
+      if (el) {
+        el.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+      }
+    });
   }
 
   return (
@@ -70,32 +68,32 @@ export default function Navbar() {
         ref={navRef}
         aria-label="Main Navigation"
         onMouseMove={handleMouseMove}
-        className="dock-nav flex items-center gap-1 px-2 py-2"
+        onMouseLeave={resetIcons}
+        className="dock-nav flex items-end gap-2 px-3 py-2"
       >
         <div className="dock-glare-container">
           <div ref={glareRef} className="dock-glare" />
         </div>
 
-        <div className="relative flex items-center gap-1 z-[3]">
-          <div ref={pillRef} className="dock-pill" />
-
-          {navigationData.items.map((item) => {
+        <div className="relative flex items-end gap-2 z-[3]">
+          {navigationData.items.map((item, index) => {
             const Icon = ICONS[item.name] ?? Home;
-            const isActive = item.name === activeItem;
 
             return (
-              
+              <a
                 key={item.name}
                 href={item.href}
-                ref={(el) => {
-                  btnRefs.current[item.name] = el;
-                }}
-                onClick={() => handleSelect(item.name)}
-                className={`dock-btn ${isActive ? "dock-btn-active" : ""}`}
+                onMouseEnter={() => focusIcon(index)}
+                className="dock-item"
               >
-                <span className="dock-btn-content">
-                  <Icon className="w-5 h-5" strokeWidth={2.25} />
-                  <span>{item.name}</span>
+                <span className="dock-tooltip">{item.name}</span>
+                <span
+                  ref={(el) => {
+                    iconRefs.current[item.name] = el;
+                  }}
+                  className="dock-icon-wrap"
+                >
+                  <Icon className="w-6 h-6" strokeWidth={2} />
                 </span>
               </a>
             );
