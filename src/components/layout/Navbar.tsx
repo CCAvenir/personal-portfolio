@@ -80,7 +80,7 @@ export default function Navbar() {
             const Icon = ICONS[item.name] ?? Home;
 
             return (
-              <a
+            <a
                 key={item.name}
                 href={item.href}
                 onMouseEnter={() => focusIcon(index)}
@@ -108,11 +108,8 @@ export default function Navbar() {
           onClick={toggleTheme}
           className="dock-theme-btn"
         >
-          {theme === "light" ? (
-            <Sun className="w-5 h-5" strokeWidth={2.2} />
-          ) : (
-            <Moon className="w-5 h-5" strokeWidth={2.2} />
-          )}
+          <Sun className="sun-icon w-5 h-5" strokeWidth={2.2} />
+          <Moon className="moon-icon w-5 h-5" strokeWidth={2.2} />
         </button>
       </nav>
     </header>
