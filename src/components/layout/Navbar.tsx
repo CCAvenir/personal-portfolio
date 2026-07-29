@@ -17,6 +17,7 @@ export default function Navbar() {
   const iconRefs = useRef<Record<string, HTMLSpanElement | null>>({});
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [spinningItem, setSpinningItem] = useState<string | null>(null);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const nav = navRef.current;
@@ -62,6 +63,10 @@ export default function Navbar() {
     });
   }
 
+  function handleItemClick(name: string) {
+    setSpinningItem(name);
+  }
+
   return (
     <header className="fixed bottom-6 inset-x-0 z-50 flex justify-center px-4">
       <nav
@@ -78,12 +83,14 @@ export default function Navbar() {
         <div className="relative flex items-end gap-2 z-[3]">
           {navigationData.items.map((item, index) => {
             const Icon = ICONS[item.name] ?? Home;
+            const isSpinning = spinningItem === item.name;
 
             return (
-            <a
+              <a
                 key={item.name}
                 href={item.href}
                 onMouseEnter={() => focusIcon(index)}
+                onClick={() => handleItemClick(item.name)}
                 className="dock-item"
               >
                 <span className="dock-tooltip">{item.name}</span>
@@ -93,14 +100,16 @@ export default function Navbar() {
                   }}
                   className="dock-icon-wrap"
                 >
-                  <Icon className="w-6 h-6" strokeWidth={2} />
+                  <Icon
+                    className={`w-6 h-6 ${isSpinning ? "dock-icon-spin" : ""}`}
+                    strokeWidth={2}
+                    onAnimationEnd={() => setSpinningItem(null)}
+                  />
                 </span>
               </a>
             );
           })}
         </div>
-
-        <div className="dock-divider" />
 
         <button
           type="button"
