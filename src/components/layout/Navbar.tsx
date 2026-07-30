@@ -3,23 +3,41 @@
 import React, { useRef, useState } from "react";
 import {
   Home,
+  House,
   User,
+  UserRound,
   FolderKanban,
   FolderOpen,
   Mail,
   MailOpen,
-  house-heart,
-  user-star,
   Sun,
   Moon,
 } from "lucide-react";
 import { navigationData } from "@/data/navigation";
 
-const ICONS: Record<string, { Default: React.ElementType; Hover: React.ElementType }> = {
-  Home: { Default: Home, Hover: house-heart },
-  About: { Default: User, Hover: user-star },
-  Projects: { Default: FolderKanban, Hover: FolderOpen },
-  Contact: { Default: Mail, Hover: MailOpen },
+const ICONS: Record<
+  string,
+  {
+    Default: React.ElementType;
+    Hover: React.ElementType;
+  }
+> = {
+  Home: {
+    Default: Home,
+    Hover: House,
+  },
+  About: {
+    Default: User,
+    Hover: UserRound,
+  },
+  Projects: {
+    Default: FolderKanban,
+    Hover: FolderOpen,
+  },
+  Contact: {
+    Default: Mail,
+    Hover: MailOpen,
+  },
 };
 
 const THEME_KEY = "__theme__";
@@ -38,27 +56,35 @@ export default function Navbar() {
     const nav = navRef.current;
     const glare = glareRef.current;
     if (!nav || !glare) return;
+
     const rect = nav.getBoundingClientRect();
+
     glare.style.setProperty("--x", `${e.clientX - rect.left}px`);
     glare.style.setProperty("--y", `${e.clientY - rect.top}px`);
   }
 
   function toggleTheme() {
     const next = theme === "light" ? "dark" : "light";
+
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
+
     handleItemClick(THEME_KEY);
   }
 
   function resetIcons() {
     allNames.forEach((name) => {
       const el = iconRefs.current[name];
-      if (el) el.style.transform = "scale(1) translateY(0px)";
+
+      if (el) {
+        el.style.transform = "scale(1) translateY(0px)";
+      }
     });
   }
 
   function focusIcon(hoverIndex: number) {
     resetIcons();
+
     const transformations = [
       { idx: hoverIndex - 2, scale: 1.1, translateY: 0 },
       { idx: hoverIndex - 1, scale: 1.25, translateY: -4 },
@@ -70,6 +96,7 @@ export default function Navbar() {
     transformations.forEach(({ idx, scale, translateY }) => {
       const name = allNames[idx];
       const el = name ? iconRefs.current[name] : null;
+
       if (el) {
         el.style.transform = `scale(${scale}) translateY(${translateY}px)`;
       }
@@ -77,7 +104,10 @@ export default function Navbar() {
   }
 
   function handleItemClick(name: string) {
-    setSpinCounts((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
+    setSpinCounts((prev) => ({
+      ...prev,
+      [name]: (prev[name] ?? 0) + 1,
+    }));
   }
 
   return (
@@ -95,12 +125,18 @@ export default function Navbar() {
 
         <div className="relative flex items-end gap-5 z-[3]">
           {navigationData.items.map((item, index) => {
-            const { Default: DefaultIcon, Hover: HoverIcon } =
-              ICONS[item.name] ?? { Default: Home, Hover: Heart };
+            const {
+              Default: DefaultIcon,
+              Hover: HoverIcon,
+            } = ICONS[item.name] ?? {
+              Default: Home,
+              Hover: House,
+            };
+
             const spinCount = spinCounts[item.name] ?? 0;
 
             return (
-            <a
+              <a
                 key={item.name}
                 href={item.href}
                 onMouseEnter={() => focusIcon(index)}
@@ -108,6 +144,7 @@ export default function Navbar() {
                 className="dock-item"
               >
                 <span className="dock-tooltip">{item.name}</span>
+
                 <span
                   ref={(el) => {
                     iconRefs.current[item.name] = el;
@@ -120,6 +157,7 @@ export default function Navbar() {
                         className="icon-base icon-default w-7 h-7"
                         strokeWidth={2}
                       />
+
                       <HoverIcon
                         className="icon-base icon-hover w-7 h-7"
                         strokeWidth={2}
@@ -139,13 +177,17 @@ export default function Navbar() {
             className="dock-item dock-theme-item"
           >
             <span className="dock-tooltip">Theme</span>
+
             <span
               ref={(el) => {
                 iconRefs.current[THEME_KEY] = el;
               }}
               className="dock-icon-wrap dock-theme-wrap"
             >
-              <span key={spinCounts[THEME_KEY] ?? 0} className="dock-icon-yaw">
+              <span
+                key={spinCounts[THEME_KEY] ?? 0}
+                className="dock-icon-yaw"
+              >
                 <span className="dock-theme-swap">
                   <Sun className="sun-icon w-6 h-6" strokeWidth={2.2} />
                   <Moon className="moon-icon w-6 h-6" strokeWidth={2.2} />
