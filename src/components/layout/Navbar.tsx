@@ -11,6 +11,8 @@ const ICONS: Record<string, React.ElementType> = {
   Contact: Mail,
 };
 
+const THEME_KEY = "__theme__";
+
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
@@ -18,10 +20,11 @@ export default function Navbar() {
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  // Spin counters — incrementing forces a remount of the icon,
-  // which guarantees the CSS animation replays every click.
   const [spinCounts, setSpinCounts] = useState<Record<string, number>>({});
-  const [themeSpinCount, setThemeSpinCount] = useState(0);
+
+  // Full ordered list including the theme button, so the magnify wave
+  // treats it as just another dock slot.
+  const allNames = [...navigationData.items.map((i) => i.name), THEME_KEY];
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const nav = navRef.current;
@@ -36,20 +39,19 @@ export default function Navbar() {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    setThemeSpinCount((c) => c + 1);
+    handleItemClick(THEME_KEY);
   }
 
   // ---- Dock magnification effect ----
   function resetIcons() {
-    navigationData.items.forEach((item) => {
-      const el = iconRefs.current[item.name];
+    allNames.forEach((name) => {
+      const el = iconRefs.current[name];
       if (el) el.style.transform = "scale(1) translateY(0px)";
     });
   }
 
   function focusIcon(hoverIndex: number) {
     resetIcons();
-    const names = navigationData.items.map((i) => i.name);
 
     const transformations = [
       { idx: hoverIndex - 2, scale: 1.1, translateY: 0 },
@@ -60,7 +62,7 @@ export default function Navbar() {
     ];
 
     transformations.forEach(({ idx, scale, translateY }) => {
-      const name = names[idx];
+      const name = allNames[idx];
       const el = name ? iconRefs.current[name] : null;
       if (el) {
         el.style.transform = `scale(${scale}) translateY(${translateY}px)`;
@@ -73,19 +75,19 @@ export default function Navbar() {
   }
 
   return (
-    <header className="fixed bottom-6 inset-x-0 z-50 flex justify-center px-4">
+    <header className="fixed bottom-8 inset-x-0 z-50 flex justify-center px-4">
       <nav
         ref={navRef}
         aria-label="Main Navigation"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetIcons}
-        className="dock-nav flex items-end gap-2 px-3 py-2"
+        className="dock-nav flex items-end gap-4 px-4 py-3"
       >
         <div className="dock-glare-container">
           <div ref={glareRef} className="dock-glare" />
         </div>
 
-        <div className="relative flex items-end gap-2 z-[3]">
+        <div className="relative flex items-end gap-4 z-[3]">
           {navigationData.items.map((item, index) => {
             const Icon = ICONS[item.name] ?? Home;
             const spinCount = spinCounts[item.name] ?? 0;
@@ -105,28 +107,34 @@ export default function Navbar() {
                   }}
                   className="dock-icon-wrap"
                 >
-                  <Icon
-                    key={spinCount}
-                    className={`w-6 h-6 ${spinCount > 0 ? "dock-icon-spin" : ""}`}
-                    strokeWidth={2}
-                  />
+                  <span key={spinCount} className="dock-icon-yaw">
+                    <Icon className="w-7 h-7" strokeWidth={2} />
+                  </span>
                 </span>
               </a>
             );
           })}
 
-          {/* Theme toggle — styled to match the nav items */}
+          {/* Theme toggle — part of the same dock row + magnify wave */}
           <button
             type="button"
             aria-label="Toggle Dark Mode"
+            onMouseEnter={() => focusIcon(navigationData.items.length)}
             onClick={toggleTheme}
             className="dock-item dock-theme-item"
           >
             <span className="dock-tooltip">Theme</span>
-            <span className="dock-icon-wrap dock-theme-wrap">
-              <span key={themeSpinCount} className="dock-theme-spin">
-                <Sun className="sun-icon w-5 h-5" strokeWidth={2.2} />
-                <Moon className="moon-icon w-5 h-5" strokeWidth={2.2} />
+            <span
+              ref={(el) => {
+                iconRefs.current[THEME_KEY] = el;
+              }}
+              className="dock-icon-wrap dock-theme-wrap"
+            >
+              <span key={spinCounts[THEME_KEY] ?? 0} className="dock-icon-yaw">
+                <span className="dock-theme-swap">
+                  <Sun className="sun-icon w-6 h-6" strokeWidth={2.2} />
+                  <Moon className="moon-icon w-6 h-6" strokeWidth={2.2} />
+                </span>
               </span>
             </span>
           </button>
