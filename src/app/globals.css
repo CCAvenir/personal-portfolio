@@ -88,7 +88,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
+  width: 68px;
   height: 56px;
   z-index: 2;
   perspective: 600px;
@@ -109,7 +109,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Yaw spin: rotates around the vertical (Y) axis */
+/* 3D Yaw Spin */
 
 .dock-icon-yaw {
   display: inline-flex;
@@ -133,9 +133,11 @@ body {
   animation: dock-yaw-spin 0.6s ease;
 }
 
+/* Tooltip */
+
 .dock-tooltip {
   position: absolute;
-  bottom: 64px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.6);
@@ -223,4 +225,66 @@ body {
 [data-theme="dark"] .dock-theme-swap .moon-icon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
+}
+
+/* Icon swap on hover */
+
+.dock-icon-swap {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-base {
+  position: absolute;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.icon-default {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.icon-hover {
+  opacity: 0;
+  transform: scale(0.5) rotate(-15deg);
+}
+
+.dock-item:hover .icon-default {
+  opacity: 0;
+  transform: scale(0.5) rotate(15deg);
+}
+
+.dock-item:hover .icon-hover {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Small bounce on hover */
+
+@keyframes dock-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-5px);
+  }
+
+  55% {
+    transform: translateY(0);
+  }
+
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+.dock-item:hover .dock-icon-swap,
+.dock-item:hover .dock-theme-swap {
+  animation: dock-bounce 0.45s ease;
 }

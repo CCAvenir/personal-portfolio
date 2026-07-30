@@ -1,14 +1,25 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Home, User, FolderKanban, Mail, Sun, Moon } from "lucide-react";
+import {
+  Home,
+  User,
+  FolderKanban,
+  FolderOpen,
+  Mail,
+  MailOpen,
+  house-heart,
+  user-star,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { navigationData } from "@/data/navigation";
 
-const ICONS: Record<string, React.ElementType> = {
-  Home: Home,
-  About: User,
-  Projects: FolderKanban,
-  Contact: Mail,
+const ICONS: Record<string, { Default: React.ElementType; Hover: React.ElementType }> = {
+  Home: { Default: Home, Hover: house-heart },
+  About: { Default: User, Hover: user-star },
+  Projects: { Default: FolderKanban, Hover: FolderOpen },
+  Contact: { Default: Mail, Hover: MailOpen },
 };
 
 const THEME_KEY = "__theme__";
@@ -19,11 +30,8 @@ export default function Navbar() {
   const iconRefs = useRef<Record<string, HTMLSpanElement | null>>({});
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
-
   const [spinCounts, setSpinCounts] = useState<Record<string, number>>({});
 
-  // Full ordered list including the theme button, so the magnify wave
-  // treats it as just another dock slot.
   const allNames = [...navigationData.items.map((i) => i.name), THEME_KEY];
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
@@ -42,7 +50,6 @@ export default function Navbar() {
     handleItemClick(THEME_KEY);
   }
 
-  // ---- Dock magnification effect ----
   function resetIcons() {
     allNames.forEach((name) => {
       const el = iconRefs.current[name];
@@ -52,7 +59,6 @@ export default function Navbar() {
 
   function focusIcon(hoverIndex: number) {
     resetIcons();
-
     const transformations = [
       { idx: hoverIndex - 2, scale: 1.1, translateY: 0 },
       { idx: hoverIndex - 1, scale: 1.25, translateY: -4 },
@@ -81,19 +87,20 @@ export default function Navbar() {
         aria-label="Main Navigation"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetIcons}
-        className="dock-nav flex items-end gap-4 px-4 py-3"
+        className="dock-nav flex items-end gap-5 px-6 py-3"
       >
         <div className="dock-glare-container">
           <div ref={glareRef} className="dock-glare" />
         </div>
 
-        <div className="relative flex items-end gap-4 z-[3]">
+        <div className="relative flex items-end gap-5 z-[3]">
           {navigationData.items.map((item, index) => {
-            const Icon = ICONS[item.name] ?? Home;
+            const { Default: DefaultIcon, Hover: HoverIcon } =
+              ICONS[item.name] ?? { Default: Home, Hover: Heart };
             const spinCount = spinCounts[item.name] ?? 0;
 
             return (
-              <a
+            <a
                 key={item.name}
                 href={item.href}
                 onMouseEnter={() => focusIcon(index)}
@@ -108,14 +115,22 @@ export default function Navbar() {
                   className="dock-icon-wrap"
                 >
                   <span key={spinCount} className="dock-icon-yaw">
-                    <Icon className="w-7 h-7" strokeWidth={2} />
+                    <span className="dock-icon-swap">
+                      <DefaultIcon
+                        className="icon-base icon-default w-7 h-7"
+                        strokeWidth={2}
+                      />
+                      <HoverIcon
+                        className="icon-base icon-hover w-7 h-7"
+                        strokeWidth={2}
+                      />
+                    </span>
                   </span>
                 </span>
               </a>
             );
           })}
 
-          {/* Theme toggle — part of the same dock row + magnify wave */}
           <button
             type="button"
             aria-label="Toggle Dark Mode"
