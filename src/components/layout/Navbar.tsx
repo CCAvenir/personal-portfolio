@@ -17,7 +17,11 @@ export default function Navbar() {
   const iconRefs = useRef<Record<string, HTMLSpanElement | null>>({});
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [spinningItem, setSpinningItem] = useState<string | null>(null);
+
+  // Spin counters — incrementing forces a remount of the icon,
+  // which guarantees the CSS animation replays every click.
+  const [spinCounts, setSpinCounts] = useState<Record<string, number>>({});
+  const [themeSpinCount, setThemeSpinCount] = useState(0);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const nav = navRef.current;
@@ -32,6 +36,7 @@ export default function Navbar() {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
+    setThemeSpinCount((c) => c + 1);
   }
 
   // ---- Dock magnification effect ----
@@ -64,7 +69,7 @@ export default function Navbar() {
   }
 
   function handleItemClick(name: string) {
-    setSpinningItem(name);
+    setSpinCounts((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
   }
 
   return (
@@ -83,7 +88,7 @@ export default function Navbar() {
         <div className="relative flex items-end gap-2 z-[3]">
           {navigationData.items.map((item, index) => {
             const Icon = ICONS[item.name] ?? Home;
-            const isSpinning = spinningItem === item.name;
+            const spinCount = spinCounts[item.name] ?? 0;
 
             return (
               <a
@@ -101,25 +106,31 @@ export default function Navbar() {
                   className="dock-icon-wrap"
                 >
                   <Icon
-                    className={`w-6 h-6 ${isSpinning ? "dock-icon-spin" : ""}`}
+                    key={spinCount}
+                    className={`w-6 h-6 ${spinCount > 0 ? "dock-icon-spin" : ""}`}
                     strokeWidth={2}
-                    onAnimationEnd={() => setSpinningItem(null)}
                   />
                 </span>
               </a>
             );
           })}
-        </div>
 
-        <button
-          type="button"
-          aria-label="Toggle Dark Mode"
-          onClick={toggleTheme}
-          className="dock-theme-btn"
-        >
-          <Sun className="sun-icon w-5 h-5" strokeWidth={2.2} />
-          <Moon className="moon-icon w-5 h-5" strokeWidth={2.2} />
-        </button>
+          {/* Theme toggle — styled to match the nav items */}
+          <button
+            type="button"
+            aria-label="Toggle Dark Mode"
+            onClick={toggleTheme}
+            className="dock-item dock-theme-item"
+          >
+            <span className="dock-tooltip">Theme</span>
+            <span className="dock-icon-wrap dock-theme-wrap">
+              <span key={themeSpinCount} className="dock-theme-spin">
+                <Sun className="sun-icon w-5 h-5" strokeWidth={2.2} />
+                <Moon className="moon-icon w-5 h-5" strokeWidth={2.2} />
+              </span>
+            </span>
+          </button>
+        </div>
       </nav>
     </header>
   );

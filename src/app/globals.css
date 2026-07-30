@@ -148,45 +148,52 @@ body {
   z-index: 2;
 }
 
-.dock-theme-btn {
+/* Theme Toggle */
+
+.dock-theme-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dock-theme-wrap {
   position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  color: var(--icon-color);
-  display: flex;
+  overflow: visible;
+}
+
+.dock-theme-spin {
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
-  transition: color 0.3s ease;
+  width: 20px;
+  height: 20px;
 }
 
-.dock-theme-btn:hover {
-  color: var(--icon-active);
-}
-
-.dock-theme-btn svg {
+.dock-theme-spin svg {
   position: absolute;
-  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s ease;
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1),
+    opacity 0.3s ease;
 }
 
-.dock-theme-btn .sun-icon {
+.dock-theme-spin .sun-icon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
 }
 
-.dock-theme-btn .moon-icon {
+.dock-theme-spin .moon-icon {
   opacity: 0;
   transform: rotate(-90deg) scale(0);
-  position: absolute;
 }
 
-[data-theme="dark"] .dock-theme-btn .sun-icon {
+[data-theme="dark"] .dock-theme-spin .sun-icon {
   opacity: 0;
   transform: rotate(90deg) scale(0);
 }
 
-[data-theme="dark"] .dock-theme-btn .moon-icon {
+[data-theme="dark"] .dock-theme-spin .moon-icon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
 }
@@ -200,6 +207,6 @@ body {
   }
 }
 
-.dock-icon-spin {
+.dock-theme-spin {
   animation: dock-spin 0.5s ease;
 }
