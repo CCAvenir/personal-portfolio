@@ -3,10 +3,10 @@
 import React, { useRef, useState } from "react";
 import {
   Home,
-  House,
+  HouseHeart,
   User,
-  UserRound,
-  FolderKanban,
+  UserStar,
+  Folder,
   FolderOpen,
   Mail,
   MailOpen,
@@ -24,14 +24,14 @@ const ICONS: Record<
 > = {
   Home: {
     Default: Home,
-    Hover: House,
+    Hover: HouseHeart,
   },
   About: {
     Default: User,
-    Hover: UserRound,
+    Hover: UserStar,
   },
   Projects: {
-    Default: FolderKanban,
+    Default: Folder,
     Hover: FolderOpen,
   },
   Contact: {
@@ -117,7 +117,7 @@ export default function Navbar() {
         aria-label="Main Navigation"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetIcons}
-        className="dock-nav flex items-end gap-5 px-6 py-3"
+        className="dock-nav flex items-end gap-5 px-6 py-2"
       >
         <div className="dock-glare-container">
           <div ref={glareRef} className="dock-glare" />
@@ -130,7 +130,7 @@ export default function Navbar() {
               Hover: HoverIcon,
             } = ICONS[item.name] ?? {
               Default: Home,
-              Hover: House,
+              Hover: HouseHeart,
             };
 
             const spinCount = spinCounts[item.name] ?? 0;

@@ -89,7 +89,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 68px;
-  height: 56px;
+  height: 52px;
   z-index: 2;
   perspective: 600px;
 }
@@ -105,7 +105,7 @@ body {
   transition: transform 0.25s cubic-bezier(0.34, 1.5, 0.64, 1);
   border: 1.5px solid var(--divider);
   border-radius: 14px;
-  padding: 8px;
+  padding: 6px;
   box-sizing: border-box;
 }
 
@@ -137,7 +137,7 @@ body {
 
 .dock-tooltip {
   position: absolute;
-  bottom: 80px;
+  bottom: 72px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.6);
@@ -198,33 +198,38 @@ body {
   justify-content: center;
   width: 24px;
   height: 24px;
+  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.dock-theme-item:hover .dock-theme-swap {
+  transform: rotate(360deg);
 }
 
 .dock-theme-swap svg {
   position: absolute;
   transition:
-    transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1),
-    opacity 0.3s ease;
+    transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1),
+    opacity 0.25s ease;
 }
 
 .dock-theme-swap .sun-icon {
   opacity: 1;
-  transform: rotate(0deg) scale(1);
+  transform: scale(1);
 }
 
 .dock-theme-swap .moon-icon {
   opacity: 0;
-  transform: rotate(-90deg) scale(0);
+  transform: scale(0.5);
 }
 
 [data-theme="dark"] .dock-theme-swap .sun-icon {
   opacity: 0;
-  transform: rotate(90deg) scale(0);
+  transform: scale(0.5);
 }
 
 [data-theme="dark"] .dock-theme-swap .moon-icon {
   opacity: 1;
-  transform: rotate(0deg) scale(1);
+  transform: scale(1);
 }
 
 /* Icon swap on hover */
