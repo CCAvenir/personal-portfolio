@@ -10,15 +10,14 @@ import {
   MailOpen,
   HouseHeart,
   UserStar,
+  CodeXml,
+  Code,
   Sun,
   Moon,
 } from "lucide-react";
 import { navigationData } from "@/data/navigation";
 
-const ICONS: Record<
-  string,
-  { Default: React.ElementType; Hover: React.ElementType }
-> = {
+const ICONS: Record<string, { Default: React.ElementType; Hover: React.ElementType }> = {
   Home: { Default: Home, Hover: HouseHeart },
   About: { Default: User, Hover: UserStar },
   Projects: { Default: Folder, Hover: FolderOpen },
@@ -26,6 +25,16 @@ const ICONS: Record<
 };
 
 const THEME_KEY = "__theme__";
+const CODE_KEY = "__code__";
+
+// Insert the extra "Code" icon right after "About" in the dock order
+const dockOrder: { key: string; isExtra: boolean; item?: (typeof navigationData.items)[number] }[] = [];
+navigationData.items.forEach((item) => {
+  dockOrder.push({ key: item.name, isExtra: false, item });
+  if (item.name === "About") {
+    dockOrder.push({ key: CODE_KEY, isExtra: true });
+  }
+});
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
@@ -36,7 +45,7 @@ export default function Navbar() {
   const [spinCounts, setSpinCounts] = useState<Record<string, number>>({});
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
-  const allNames = [...navigationData.items.map((i) => i.name), THEME_KEY];
+  const allNames = [...dockOrder.map((d) => d.key), THEME_KEY];
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const nav = navRef.current;
@@ -82,7 +91,7 @@ export default function Navbar() {
 
   function handleItemClick(name: string) {
     setSpinCounts((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
-  setActiveItem((prev) => (prev === name ? null : name));
+    setActiveItem((prev) => (prev === name ? null : name));
   }
 
   return (
@@ -99,11 +108,49 @@ export default function Navbar() {
         </div>
 
         <div className="relative flex items-end gap-5 z-[3]">
-          {navigationData.items.map((item, index) => {
+          {dockOrder.map((entry, index) => {
+            const spinCount = spinCounts[entry.key] ?? 0;
+            const isActive = activeItem === entry.key;
+
+            // Extra "Code" icon — no nav link, just a standalone dock item
+            if (entry.isExtra) {
+              return (
+                <a
+                  key={entry.key}
+                  href="#code"
+                  onMouseEnter={() => focusIcon(index)}
+                  onClick={() => handleItemClick(entry.key)}
+                  className="dock-item"
+                >
+                  <span className="dock-tooltip">Code</span>
+                  <span
+                    ref={(el) => {
+                      iconRefs.current[entry.key] = el;
+                    }}
+                    className={`dock-icon-wrap ${
+                      isActive ? "dock-icon-wrap-active" : ""
+                    }`}
+                  >
+                    <span key={spinCount} className="dock-icon-yaw">
+                      <span className="dock-icon-swap">
+                        <CodeXml
+                          className="icon-base icon-default w-7 h-7"
+                          strokeWidth={2}
+                        />
+                        <Code
+                          className="icon-base icon-hover w-7 h-7"
+                          strokeWidth={2}
+                        />
+                      </span>
+                    </span>
+                  </span>
+                </a>
+              );
+            }
+
+            const item = entry.item!;
             const { Default: DefaultIcon, Hover: HoverIcon } =
               ICONS[item.name] ?? { Default: Home, Hover: HouseHeart };
-            const spinCount = spinCounts[item.name] ?? 0;
-            const isActive = activeItem === item.name;
 
             return (
               <a
@@ -142,7 +189,7 @@ export default function Navbar() {
           <button
             type="button"
             aria-label="Toggle Dark Mode"
-            onMouseEnter={() => focusIcon(navigationData.items.length)}
+            onMouseEnter={() => focusIcon(dockOrder.length)}
             onClick={toggleTheme}
             className="dock-item dock-theme-item"
           >
