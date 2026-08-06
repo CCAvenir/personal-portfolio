@@ -122,7 +122,7 @@ export default function Navbar() {
                   onClick={() => handleItemClick(entry.key)}
                   className="dock-item"
                 >
-                  <span className="dock-tooltip">Code</span>
+                  <span className="dock-tooltip">Tech Stack</span>
                   <span
                     ref={(el) => {
                       iconRefs.current[entry.key] = el;

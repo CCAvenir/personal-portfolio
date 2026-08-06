@@ -14,13 +14,13 @@
   --reflection-start: rgba(255, 255, 255, 0.6);
   --reflection-end: rgba(255, 255, 255, 0);
 
-  --icon-color: rgba(0, 0, 0, 0.55);
+  --icon-border: rgba(0, 0, 0, 0.8);
   --icon-active: rgba(0, 0, 0, 0.9);
   --divider: rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] {
-  --bg-color: #000000;
+    --bg-color: #000000;
   --text-color: #f2f2f7;
 
   --glass-bg: rgba(60, 60, 67, 0.35);
@@ -32,7 +32,7 @@
   --reflection-start: rgba(255, 255, 255, 0.15);
   --reflection-end: rgba(255, 255, 255, 0);
 
-  --icon-color: rgba(255, 255, 255, 0.55);
+  --icon-border: rgba(255, 255, 255, 0.8);
   --icon-active: #ffffff;
   --divider: rgba(255, 255, 255, 0.15);
 }
@@ -122,7 +122,7 @@ body {
   color: var(--icon-active);
   transform-origin: 50% 100%;
   transition: transform 0.25s cubic-bezier(0.34, 1.5, 0.64, 1);
-  border: 1.5px solid var(--divider);
+  border: 1.5px solid var(--icon-border);
   border-radius: 14px;
   padding: 6px;
   box-sizing: border-box;
