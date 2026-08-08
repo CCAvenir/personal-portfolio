@@ -17,7 +17,10 @@ import {
 } from "lucide-react";
 import { navigationData } from "@/data/navigation";
 
-const ICONS: Record<string, { Default: React.ElementType; Hover: React.ElementType }> = {
+const ICONS: Record<
+  string,
+  { Default: React.ElementType; Hover: React.ElementType }
+> = {
   Home: { Default: Home, Hover: HouseHeart },
   About: { Default: User, Hover: UserStar },
   Projects: { Default: Folder, Hover: FolderOpen },
@@ -28,7 +31,11 @@ const THEME_KEY = "__theme__";
 const CODE_KEY = "__code__";
 
 // Insert the extra "Code" icon right after "About" in the dock order
-const dockOrder: { key: string; isExtra: boolean; item?: (typeof navigationData.items)[number] }[] = [];
+const dockOrder: {
+  key: string;
+  isExtra: boolean;
+  item?: (typeof navigationData.items)[number];
+}[] = [];
 navigationData.items.forEach((item) => {
   dockOrder.push({ key: item.name, isExtra: false, item });
   if (item.name === "About") {
@@ -117,7 +124,7 @@ export default function Navbar() {
               return (
                 <a
                   key={entry.key}
-                  href="#code"
+                  href="#skills"    
                   onMouseEnter={() => focusIcon(index)}
                   onClick={() => handleItemClick(entry.key)}
                   className="dock-item"
@@ -149,8 +156,9 @@ export default function Navbar() {
             }
 
             const item = entry.item!;
-            const { Default: DefaultIcon, Hover: HoverIcon } =
-              ICONS[item.name] ?? { Default: Home, Hover: HouseHeart };
+            const { Default: DefaultIcon, Hover: HoverIcon } = ICONS[
+              item.name
+            ] ?? { Default: Home, Hover: HouseHeart };
 
             return (
               <a

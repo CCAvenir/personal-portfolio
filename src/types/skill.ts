@@ -1,10 +1,12 @@
 export interface Skill {
   name: string;
-  level?: string;
-  iconPlaceholder?: string;
+  category: SkillCategory;
 }
 
-export interface SkillCategory {
-  category: string;
-  skills: Skill[];
-}
+export type SkillCategory =
+  | "Languages & Markup"
+  | "Frameworks & Libraries"
+  | "Styling"
+  | "Backend & Database"
+  | "Tools & Platforms"
+  | "Design";

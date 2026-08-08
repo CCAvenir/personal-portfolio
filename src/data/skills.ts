@@ -1,56 +1,27 @@
-import { SkillCategory } from "@/types/skill";
+import { Skill } from "@/types/skill";
 
-export const skillsData: SkillCategory[] = [
-  {
-    category: "Frontend",
-    skills: [
-      { name: "React" },
-      { name: "Next.js" },
-      { name: "TypeScript" },
-      { name: "JavaScript (ES6+)" },
-      { name: "Tailwind CSS" },
-      { name: "HTML5 & CSS3" },
-    ],
-  },
-  {
-    category: "Backend",
-    skills: [
-      { name: "Node.js" },
-      { name: "Express.js" },
-      { name: "RESTful APIs" },
-    ],
-  },
-  {
-    category: "Database",
-    skills: [
-      { name: "MongoDB" },
-      { name: "PostgreSQL" },
-      { name: "MySQL" },
-    ],
-  },
-  {
-    category: "Tools",
-    skills: [
-      { name: "Git & GitHub" },
-      { name: "VS Code" },
-      { name: "Postman" },
-      { name: "npm / yarn / pnpm" },
-    ],
-  },
-  {
-    category: "Other Technologies",
-    skills: [
-      { name: "Responsive Web Design" },
-      { name: "Semantic HTML & Accessibility" },
-      { name: "Web Performance Optimization" },
-    ],
-  },
-];
+export const skillsData: Skill[] = [
+  { name: "HTML", category: "Languages & Markup" },
+  { name: "CSS", category: "Languages & Markup" },
+  { name: "JavaScript", category: "Languages & Markup" },
+  { name: "Java", category: "Languages & Markup" },
+  { name: "Python", category: "Languages & Markup" },
 
-export const softSkillsData: string[] = [
-  "Problem Solving",
-  "Team Collaboration",
-  "Adaptability",
-  "Continuous Learning",
-  "Attention to Detail",
+  { name: "Vue", category: "Frameworks & Libraries" },
+  { name: "Angular", category: "Frameworks & Libraries" },
+  { name: "Laravel", category: "Frameworks & Libraries" },
+  { name: "Flutter", category: "Frameworks & Libraries" },
+
+  { name: "Tailwind CSS", category: "Styling" },
+
+  { name: "PHP", category: "Backend & Database" },
+  { name: "MySQL", category: "Backend & Database" },
+
+  { name: "Git", category: "Tools & Platforms" },
+  { name: "GitHub", category: "Tools & Platforms" },
+  { name: "VS Code", category: "Tools & Platforms" },
+  { name: "WordPress", category: "Tools & Platforms" },
+
+  { name: "Figma", category: "Design" },
+  { name: "Canva", category: "Design" },
 ];
